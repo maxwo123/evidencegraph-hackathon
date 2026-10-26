@@ -13,6 +13,23 @@ public Git history.
 
 The separate [life sciences research notebook](life-sciences-research-notebook.md) records the broader research and customer-discovery work that preceded the hackathon direction.
 
+## Run the EvidenceGraph prototype
+
+The [Next.js application](web/README.md) implements the first end-to-end slice:
+a reviewed Morgan 2017 passage fixture, server-side Meta Model API request,
+grounded answer card, claim-to-passage links, and source reveal.
+
+```bash
+cd web
+npm install
+cp .env.example .env.local
+# Add MODEL_API_KEY to .env.local, then:
+npm run dev
+```
+
+The reviewed baseline remains inspectable without a key. Live generation uses
+the key only on the server; no API credential is included in browser code.
+
 ## Research notebook status — October 19, 2026
 
 - The notebook is a **first draft**. It maps the research process, common lab roles, data and ML workflows, and questions to ask researchers.
