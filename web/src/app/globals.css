@@ -557,11 +557,23 @@ textarea:focus-visible {
   font-size: 40px;
 }
 
+.excerpt-note,
 .copyright-note {
   margin: 12px 0 30px;
   color: var(--ink-muted);
   font-size: 9px;
   line-height: 1.5;
+}
+
+.excerpt-note {
+  margin-bottom: 8px;
+  color: var(--cobalt);
+  font-family: var(--font-plex-mono), monospace;
+  letter-spacing: 0.02em;
+}
+
+.excerpt-note + .copyright-note {
+  margin-top: 0;
 }
 
 .site-footer {

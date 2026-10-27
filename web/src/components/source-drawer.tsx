@@ -64,6 +64,9 @@ export function SourceDrawer({ passage, onClose }: SourceDrawerProps) {
           </dl>
 
           <blockquote>{passage.text}</blockquote>
+          {passage.excerptNote ? (
+            <p className="excerpt-note">{passage.excerptNote}</p>
+          ) : null}
           <p className="copyright-note">{passage.copyrightNotice}</p>
 
           <a

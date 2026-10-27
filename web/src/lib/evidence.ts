@@ -12,6 +12,7 @@ export type EvidencePassage = {
   pmcid: string;
   sourceUrl: string;
   text: string;
+  excerptNote?: string;
   copyrightNotice: string;
 };
 
@@ -32,7 +33,9 @@ export const evidencePassages: EvidencePassage[] = [
     pmcid: "PMC5752130",
     sourceUrl: "https://pmc.ncbi.nlm.nih.gov/articles/PMC5752130/",
     text:
-      "For the comparison of R-BIND (SM) and FDA, we included only FDA molecules within the molecular weight range of R-BIND (SM) to account for the presence of larger and potentially multivalent molecules within the FDA library (SI Figure 3-2, SI Table 3-3). Further, there were statistically significant differences in the molecular complexity of the molecules, where R-BIND (SM) contained fewer sp3-hybridized carbons (Fsp3) and stereocenters (nStereo) compared to the FDA library. We cannot determine, however, the extent to which these differences can be attributed to reduced complexity in synthetic and commercial screening libraries, from which many R-BIND (SM) ligands were discovered.",
+      "For the comparison of R-BIND (SM) and FDA, we included only FDA molecules within the molecular weight range of R-BIND (SM) to account for the presence of larger and potentially multivalent molecules within the FDA library (SI Figure 3-2, SI Table 3-3). […] Further, there were statistically significant differences in the molecular complexity of the molecules, where R-BIND (SM) contained fewer sp3-hybridized carbons (Fsp3) and stereocenters (nStereo) compared to the FDA library. […] We cannot determine, however, the extent to which these differences can be attributed to reduced complexity in synthetic and commercial screening libraries, from which many R-BIND (SM) ligands were discovered.",
+    excerptNote:
+      "Selected sentences from one paragraph; bracketed ellipses mark omitted sentences.",
     copyrightNotice:
       "Excerpt from Morgan et al. (2017). Copyright remains with the authors and publisher.",
   },
