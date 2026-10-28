@@ -1,0 +1,37 @@
+{
+  "corpus": ["morgan-2017", "donlic-2022"],
+  "questions": [
+    {
+      "id": "Q1",
+      "question": "What molecular-property differences does each paper report?",
+      "referenceAnswer": "Morgan 2017 reports distribution differences between curated bioactive RNA-targeted small molecules and a molecular-weight-restricted FDA-drug reference set, including lower molecular complexity in R-BIND and differences in recognition-related properties. Donlic 2022 reports that the broad distinguishing trends persist in R-BIND 2.0; 18 of 20 physicochemical parameters differ in its updated molecular-weight-matched FDA comparison. Donlic also warns that some shifts between R-BIND 1.2 and 2.0, including molecular weight and accessible surface area, arise from reclassification rather than a changed chemical space.",
+      "requiredPassageIds": ["morgan-2017-rbind-fda-01", "donlic-2022-reclassification-01", "donlic-2022-rbind-fda-01"],
+      "requiredQualifications": ["The FDA library is a reference/proxy, not a same-assay non-binder control.", "The Donlic corpus update is related to the earlier R-BIND dataset, not an independent replication."],
+      "prohibitedOverstatements": ["The properties prospectively predict RNA binding.", "Donlic independently replicated Morgan on an unrelated dataset."]
+    },
+    {
+      "id": "Q2",
+      "question": "What comparison groups were used, and what do they establish?",
+      "referenceAnswer": "Both papers compare curated R-BIND ligands with molecular-weight-restricted FDA-approved-drug libraries as proxies for conventional, largely protein-targeted bioactive chemical space. Donlic also compares R-BIND small-molecule versions 1.2 and 2.0. These comparisons establish descriptive distribution differences and persistence across a database update; they do not establish a validated binder-versus-non-binder decision rule.",
+      "requiredPassageIds": ["morgan-2017-rbind-fda-01", "donlic-2022-rbind-fda-01", "donlic-2022-reclassification-01"],
+      "requiredQualifications": ["Comparison groups were not assayed together as positive and negative controls."],
+      "prohibitedOverstatements": ["FDA drugs are confirmed RNA non-binders."]
+    },
+    {
+      "id": "Q3",
+      "question": "How are the datasets related, and what new evidence does the update add?",
+      "referenceAnswer": "Donlic 2022 expands and reclassifies the R-BIND resource that developed from the earlier corpus rather than providing an independent dataset. It grows the small-molecule set from 97 to 153, reports persistence of broad property and rod-like shape trends, updates the FDA comparison, adds RNA structural-motif analyses and an RNA Structure Search tool, and reports structural-class classification performance among curated known ligands.",
+      "requiredPassageIds": ["donlic-2022-dataset-update-01", "donlic-2022-structure-classes-01"],
+      "requiredQualifications": ["Continuity strengthens robustness to a database update but is weaker than independent replication."],
+      "prohibitedOverstatements": ["The update is an independent prospective validation study."]
+    },
+    {
+      "id": "Q4",
+      "question": "Do the papers establish that an untested molecule binds a particular RNA?",
+      "referenceAnswer": "No. The papers support retrospective, population-level property patterns and possible enrichment strategies. Morgan explicitly calls for testing the guiding principles across RNA targets. Donlic's structural-class analysis is performed within curated known ligands and reports cross-validated motif classification, not prospective binding of an unseen molecule to a specific RNA.",
+      "requiredPassageIds": ["morgan-2017-future-testing-01", "donlic-2022-structure-classes-01"],
+      "requiredQualifications": ["Prioritization or enrichment is not proof of binding."],
+      "prohibitedOverstatements": ["A molecule matching the profile will bind RNA.", "The model identifies the particular RNA target of an unseen molecule."]
+    }
+  ]
+}

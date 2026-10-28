@@ -1,0 +1,167 @@
+{
+  "runAt": "2026-10-28T03:05:42.070Z",
+  "model": "muse-spark-1.3",
+  "questionId": "Q1",
+  "question": "What molecular-property differences does each paper report?",
+  "note": "Reference answers were not included in either prompt.",
+  "results": [
+    {
+      "approach": "A",
+      "label": "extracted-paper-text",
+      "elapsedMs": 12217,
+      "evidenceSha256": "7bd14301ebbd2b32e2e3ed86939527a9e67a057ea70e9d9f8395c22f033dd0a2",
+      "output": {
+        "answer": "Direct results — Morgan-2017 (R-BIND SM n=67 vs MW-restricted FDA comparator used as drug-like/largely protein-targeted space, and vs NALDB SM without reported bioactivity): vs FDA, MW/HBA/RotB/tPSA not significant while LogP/LogD solubility-related and HBD differed, TC and ASA increased, Fsp3/nStereo lower, 8/9 structural parameters highly significant with higher N/lower O and more ArRings/HetRings; vs NALDB SM, medicinal/recognition not significant except relPSA while structural all significant except SysRR/Fsp3; shape by PMI KS different with rod-enrichment. Direct results — Donlic-2022 (R-BIND SM n=153, LM n=35 after MW-cutoff reclassification): SM 1.2 vs 2.0 minimal change except MW/ASA increase abolished by old cutoff control, PMI unchanged rod-enriched; SM 2.0 vs MW-filtered FDA 18/20 parameters significant with prior structural/recognition trends retained but HBA/MW/tPSA significance increased; LDA of 5 RNA-structure classes shows within-dataset separation. Authors' interpretation — both papers infer an RNA-privileged/distinct chemical space and structure-class trends; these are interpretations, not direct measurements.",
+        "claims": [
+          {
+            "text": "Morgan-2017: R-BIND SM vs MW-restricted FDA showed no significant difference (P>0.05) for 4/7 medicinal chemistry properties MW, HBA, RotB, tPSA, with significant differences for LogP/LogD described as water solubility and for HBD.",
+            "evidenceRefs": [
+              "morgan-2017"
+            ]
+          },
+          {
+            "text": "Morgan-2017: R-BIND SM vs FDA showed highly significant (P<0.001) increased total charge and higher yet narrower accessible surface area, and lower Fsp3 and nStereo.",
+            "evidenceRefs": [
+              "morgan-2017"
+            ]
+          },
+          {
+            "text": "Morgan-2017: R-BIND SM vs FDA differed highly significantly in 8/9 structural parameters, including concurrent higher N count and lower O count and more aromatic and heteroatom-containing rings.",
+            "evidenceRefs": [
+              "morgan-2017"
+            ]
+          },
+          {
+            "text": "Morgan-2017: R-BIND SM vs NALDB SM showed no significant differences for medicinal chemistry and molecular recognition except relPSA, while all structural differences were significant except SysRR and Fsp3.",
+            "evidenceRefs": [
+              "morgan-2017"
+            ]
+          },
+          {
+            "text": "Morgan-2017: By PMI KS test R-BIND SM shape distribution differed from FDA and NALDB SM with more rod-like and less disc-/sphere-like character; 72% of R-BIND SM in rod triangle vs 56% FDA and 52% NALDB SM.",
+            "evidenceRefs": [
+              "morgan-2017"
+            ]
+          },
+          {
+            "text": "Donlic-2022: R-BIND SM 1.2 vs 2.0 showed statistically significant increase only for MW (P=0.02) and ASA (P=0.03), which were no longer significant when the 1.2 MW cutoff was applied, indicating reclassification effect.",
+            "evidenceRefs": [
+              "donlic-2022"
+            ]
+          },
+          {
+            "text": "Donlic-2022: R-BIND SM 2.0 vs MW-filtered FDA showed 18/20 physicochemical parameters statistically different by Mann-Whitney U; prior structural and molecular recognition trends retained, while HBA became significant (P=0.010) and MW and tPSA became more significant.",
+            "evidenceRefs": [
+              "donlic-2022"
+            ]
+          },
+          {
+            "text": "Donlic-2022: PMI KS showed little to no difference between R-BIND SM 1.2 and 2.0, both rod-enriched, and maintained significant rod-enrichment difference vs FDA.",
+            "evidenceRefs": [
+              "donlic-2022"
+            ]
+          },
+          {
+            "text": "Donlic-2022: LDA by five RNA classes (bulges, G-quadruplexes, dsRNA, internal loops, stem loops) first three components explained ~88% variance with ~84% correct in training and ~68% correct in cross-validation within the dataset; greatest contributors were rotatable bonds, surface area, and ring systems.",
+            "evidenceRefs": [
+              "donlic-2022"
+            ]
+          },
+          {
+            "text": "Donlic-2022: Reported class averages: G-quadruplex binders averaged almost five rings and over four aromatic rings highest among classes; dsRNA binders enriched in lipophilic character; bulge binders had higher MW, rotatable bonds and surface area parameters.",
+            "evidenceRefs": [
+              "donlic-2022"
+            ]
+          },
+          {
+            "text": "Donlic-2022: PCA showed R-BIND remained in subset of FDA space with expansion partly from ligands moved from MV 1.2 to SM 2.0; nearest-neighbor average shortest Euclidean distance in 20-parameter space decreased from 2.0444 to 1.7245.",
+            "evidenceRefs": [
+              "donlic-2022"
+            ]
+          }
+        ],
+        "limitations": [
+          "FDA library was a drug-like / ~90% protein-targeted comparator with MW filtering, not a defined RNA-non-binder set.",
+          "Authors stated extent of Fsp3/nStereo difference attributable to reduced complexity of screening libraries could not be determined.",
+          "PCA first three PCs explained only ~67% (Morgan) and 64% (Donlic) of variance; nearest-neighbor and PCA require normalization and MW filtering choices.",
+          "MW/ASA/HBA shifts in 2.0 confounded by change from design-based SM/MV to MW-based SM <=700 Da / LM classification.",
+          "PMI shapes are computed Boltzmann-averaged conformers within 3 kcal/mol using MMFF94/Generalized Born, not experimental bound conformations.",
+          "LDA limited to classes with at least three ligands and three distinct targets / five or more ligands; 84% training and 68% cross-validation are within-dataset classification rates, not prospective prediction for an unseen molecule.",
+          "RNA Structure Search compares only bulge, apical loop, internal loop size and uses lowest-energy RNAfold prediction, ignoring ensemble, temperature/salt, and complex structures like G-quadruplexes."
+        ]
+      }
+    },
+    {
+      "approach": "B",
+      "label": "evidencegraph-records",
+      "elapsedMs": 9175,
+      "evidenceSha256": "52f1215f92e310cad83ef84bd748af801d4e140e32ebb9acee391f47175ec099",
+      "output": {
+        "answer": "Morgan 2017 reported that versus a molecular-weight-restricted FDA reference, R-BIND(SM) showed no significant difference in MW, HBA, RotB and tPSA but showed increases in HBD, LogP/LogD solubility measures, TC and ASA level/range and decreases in Fsp3 and nStereo. Donlic 2022 reported that after expansion from 97 to 153 ligands overall cheminformatics/shape trends remained, but with an updated MW-matched FDA comparison 18/20 parameters differed significantly; internal MW and ASA increases versus 1.2 were attributed to reclassification, not changed chemical space.",
+        "claims": [
+          {
+            "text": "Direct result: Morgan 2017 compared R-BIND(SM) distributions to only FDA molecules within the molecular weight range of R-BIND(SM) using Mann-Whitney U test.",
+            "evidenceRefs": [
+              "morgan-2017-rbind-fda-01"
+            ]
+          },
+          {
+            "text": "Direct result: Morgan 2017 found 4/7 medicinal chemistry properties - MW, HBA, RotB, tPSA - did not show significant differences with P > 0.05.",
+            "evidenceRefs": [
+              "morgan-2017-rbind-fda-01"
+            ]
+          },
+          {
+            "text": "Direct result: Morgan 2017 reported statistically significant increases for water solubility measures (LogP, LogD) and HBD in R-BIND(SM).",
+            "evidenceRefs": [
+              "morgan-2017-rbind-fda-01"
+            ]
+          },
+          {
+            "text": "Direct result: Morgan 2017 reported highly significant differences (P < 0.001) with increased TC and a higher yet narrower range of ASA in R-BIND(SM).",
+            "evidenceRefs": [
+              "morgan-2017-rbind-fda-01"
+            ]
+          },
+          {
+            "text": "Direct result: Morgan 2017 reported R-BIND(SM) contained fewer sp3-hybridized carbons (Fsp3) and stereocenters (nStereo) compared to the FDA library.",
+            "evidenceRefs": [
+              "morgan-2017-rbind-fda-01"
+            ]
+          },
+          {
+            "text": "Interpretation: Morgan 2017 authors described differences as supporting a privileged chemical space for RNA targeting and proposed explicit testing of guiding principles and library design as future directions.",
+            "evidenceRefs": [
+              "morgan-2017-future-testing-01"
+            ]
+          },
+          {
+            "text": "Direct result: Donlic 2022 reported the small molecule database grew from n=97 to n=153 while distinguishing cheminformatics and shape-based trends remained the same versus protein-targeting ligands.",
+            "evidenceRefs": [
+              "donlic-2022-dataset-update-01"
+            ]
+          },
+          {
+            "text": "Direct result: Donlic 2022 used an FDA library with MW cutoff equal to the highest MW ligand in R-BIND(SM) 2.0 (705.93 Da) and found 18 out of 20 physicochemical parameters had statistically significant differences by Mann-Whitney U.",
+            "evidenceRefs": [
+              "donlic-2022-rbind-fda-01"
+            ]
+          },
+          {
+            "text": "Direct result: Donlic 2022 found increased average MW (P-value = 0.02) and ASA (P-value = 0.03) in R-BIND(SM) 2.0 versus 1.2 but concluded these differences were due to reclassification and not a change in the chemical space itself.",
+            "evidenceRefs": [
+              "donlic-2022-reclassification-01"
+            ]
+          }
+        ],
+        "limitations": [
+          "FDA library is a molecular-weight-matched reference for conventional drug-like and largely protein-targeted space, not a same-assay control set shown not to bind RNA.",
+          "Morgan authors state the extent to which complexity differences can be attributed to reduced complexity in synthetic and commercial screening libraries from which many R-BIND(SM) ligands were discovered cannot be determined.",
+          "R-BIND 2.0 extends the earlier R-BIND corpus (97 to 153 members), not an independent replication dataset.",
+          "Apparent MW and ASA shifts between R-BIND 1.2 and 2.0 were attributed to reclassification, not a change in chemical space.",
+          "Between-library distribution differences are descriptive and do not establish that properties cause RNA binding or provide validated prospective accuracy for unseen compounds."
+        ]
+      }
+    }
+  ]
+}
