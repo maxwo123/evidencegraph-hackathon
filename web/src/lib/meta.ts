@@ -21,6 +21,8 @@ function buildPrompt(question: string): string {
 
 Answer the question using only the supplied passages. Separate what the paper directly supports from limitations or interpretation. Never describe the FDA reference collection as proven RNA non-binders. Never claim the study prospectively predicts RNA binding. If the passages do not support the question, set status to "insufficient" and say so.
 
+When comparing the papers, preserve their dataset relationship: Donlic 2022 extends and reclassifies the related R-BIND corpus rather than independently replicating Morgan 2017. Distinguish persistence across a database update from independent validation. Treat prioritization or enrichment as weaker than proof that an unseen molecule binds RNA or a particular RNA target.
+
 Return JSON only, with exactly this shape:
 {
   "answer": "concise synthesis",
@@ -45,6 +47,13 @@ export class MissingMetaApiKeyError extends Error {
   }
 }
 
+export class InvalidMetaModelResponseError extends Error {
+  constructor() {
+    super("Meta Model API did not return a valid grounded answer after retrying");
+    this.name = "InvalidMetaModelResponseError";
+  }
+}
+
 export async function askMetaModel(question: string): Promise<GroundedAnswer> {
   const apiKey = process.env.MODEL_API_KEY;
   if (!apiKey) {
@@ -57,14 +66,23 @@ export async function askMetaModel(question: string): Promise<GroundedAnswer> {
     baseURL: process.env.META_API_BASE_URL ?? defaultBaseUrl,
   });
 
-  const response = await client.responses.create({
-    model,
-    input: buildPrompt(question),
-  });
+  for (let attempt = 0; attempt < 2; attempt += 1) {
+    const response = await client.responses.create({
+      model,
+      input: buildPrompt(question),
+    });
 
-  if (!response.output_text) {
-    throw new Error("Meta Model API returned no text output");
+    if (!response.output_text) {
+      if (attempt === 1) throw new InvalidMetaModelResponseError();
+      continue;
+    }
+
+    try {
+      return parseGroundedModelAnswer(response.output_text, model);
+    } catch {
+      if (attempt === 1) throw new InvalidMetaModelResponseError();
+    }
   }
 
-  return parseGroundedModelAnswer(response.output_text, model);
+  throw new InvalidMetaModelResponseError();
 }

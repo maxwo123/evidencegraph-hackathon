@@ -1,12 +1,30 @@
 import { ZodError } from "zod";
 
-import { askMetaModel, MissingMetaApiKeyError } from "@/lib/meta";
+import {
+  askMetaModel,
+  InvalidMetaModelResponseError,
+  MissingMetaApiKeyError,
+} from "@/lib/meta";
 import { answerRequestSchema } from "@/lib/schemas";
 
 export async function POST(request: Request) {
+  let question: string;
+
   try {
     const input = answerRequestSchema.parse(await request.json());
-    const answer = await askMetaModel(input.question);
+    question = input.question;
+  } catch (error) {
+    if (error instanceof ZodError || error instanceof SyntaxError) {
+      return Response.json(
+        { error: "Enter a question between 12 and 600 characters." },
+        { status: 400 },
+      );
+    }
+    throw error;
+  }
+
+  try {
+    const answer = await askMetaModel(question);
     return Response.json(answer);
   } catch (error) {
     if (error instanceof MissingMetaApiKeyError) {
@@ -19,10 +37,13 @@ export async function POST(request: Request) {
       );
     }
 
-    if (error instanceof ZodError || error instanceof SyntaxError) {
+    if (error instanceof InvalidMetaModelResponseError) {
       return Response.json(
-        { error: "The question or model response did not match the required format." },
-        { status: 400 },
+        {
+          error:
+            "The model could not produce a verifiable answer after two attempts. Try the question again.",
+        },
+        { status: 502 },
       );
     }
 

@@ -58,7 +58,7 @@ export function SourceDrawer({ passage, onClose }: SourceDrawerProps) {
           <p className="source-authors">{passage.authors}</p>
           <dl className="source-metadata">
             <div><dt>Journal</dt><dd>{passage.journal}</dd></div>
-            <div><dt>Location</dt><dd>PDF page {passage.page}</dd></div>
+            <div><dt>Location</dt><dd>{passage.location}</dd></div>
             <div><dt>DOI</dt><dd>{passage.doi}</dd></div>
             <div><dt>PMID · PMCID</dt><dd>{passage.pmid} · {passage.pmcid}</dd></div>
           </dl>

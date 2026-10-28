@@ -49,7 +49,7 @@ export function AnswerCard({ answer, onOpenSource }: AnswerCardProps) {
                       onClick={() => onOpenSource(passageId)}
                     >
                       <span aria-hidden="true">↳</span>
-                      Morgan 2017 · p. {passage.page}
+                      {passage.authors.split(",")[0]} {passage.year} · {passage.location}
                     </button>
                   );
                 })}

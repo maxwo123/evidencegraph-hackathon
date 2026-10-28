@@ -4,7 +4,11 @@ import { FormEvent, useState } from "react";
 
 import { AnswerCard } from "@/components/answer-card";
 import { SourceDrawer } from "@/components/source-drawer";
-import { defaultQuestion, getPassageById } from "@/lib/evidence";
+import {
+  defaultQuestion,
+  exampleQuestions,
+  getPassageById,
+} from "@/lib/evidence";
 import { groundedAnswerSchema, type GroundedAnswer } from "@/lib/schemas";
 
 type EvidenceWorkbenchProps = {
@@ -63,7 +67,7 @@ export function EvidenceWorkbench({ initialAnswer }: EvidenceWorkbenchProps) {
         </a>
         <div className="corpus-meta" aria-label="Corpus status">
           <span className="status-dot" aria-hidden="true" />
-          1 paper · 2 reviewed passages
+          2 papers · 6 reviewed passages
         </div>
       </header>
 
@@ -93,6 +97,21 @@ export function EvidenceWorkbench({ initialAnswer }: EvidenceWorkbenchProps) {
               maxLength={600}
               required
             />
+            <div className="question-presets" aria-label="Reviewed questions">
+              <p>Reviewed questions</p>
+              <div>
+                {exampleQuestions.map((example, index) => (
+                  <button
+                    type="button"
+                    key={example}
+                    aria-pressed={question === example}
+                    onClick={() => setQuestion(example)}
+                  >
+                    Q{index + 1}
+                  </button>
+                ))}
+              </div>
+            </div>
             <div className="question-footer">
               <p>Answers are constrained to the passages in this corpus.</p>
               <button type="submit" disabled={isLoading}>

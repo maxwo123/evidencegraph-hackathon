@@ -20,6 +20,13 @@ describe("evidence fixture", () => {
     expect(getPassageById("morgan-2017-rbind-fda-01")?.page).toBe(4);
     expect(getPassageById("invented-source")).toBeUndefined();
   });
+
+  it("resolves the reviewed Donlic evidence", () => {
+    expect(getPassageById("donlic-2022-rbind-fda-01")?.year).toBe(2022);
+    expect(getPassageById("donlic-2022-rbind-fda-01")?.location).toBe(
+      "R-BIND (SM) 2.0 vs FDA",
+    );
+  });
 });
 
 describe("parseGroundedModelAnswer", () => {
