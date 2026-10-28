@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "test": "vitest run",
-    "evaluate:two-paper": "node scripts/run-two-paper-comparison.mjs"
+    "evaluate:two-paper": "node scripts/run-two-paper-comparison.mjs",
+    "ingest-paper": "node scripts/ingest-paper.mjs"
   },
   "dependencies": {
     "next": "16.4.3",

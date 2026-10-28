@@ -29,5 +29,18 @@ npm run lint
 npm run build
 ```
 
+## Ingest a PMC paper for review
+
+Use a PubMed Central ID to acquire the official metadata, structured XML, full
+text, checksums, and stable paragraph records:
+
+```bash
+npm run ingest-paper -- --pmcid PMC9343015
+```
+
+Generated files are saved under `local-papers/ingestion/`, which is outside
+Git. Ingestion stops at `needs_review`; it does not silently add a paper to the
+live corpus. Candidate scientific passages still require selection and review.
+
 The response validator rejects malformed model output and any source ID that
 does not exist in the checked evidence fixture.
