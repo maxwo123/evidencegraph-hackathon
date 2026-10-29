@@ -28,10 +28,12 @@ Return JSON only, with exactly this shape:
   "answer": "concise synthesis",
   "status": "supported | supported_with_limitations | mixed | insufficient",
   "claims": [
-    {"text": "one atomic claim", "passageIds": ["exact-passage-id"]}
+    {"text": "one atomic claim", "kind": "direct_evidence | interpretation", "passageIds": ["exact-passage-id"]}
   ],
   "limitations": ["one specific limitation"]
 }
+
+Use "direct_evidence" for a reported method, measurement, comparison, or result. Use "interpretation" for an author conclusion, proposed implication, or synthesis. If status is "insufficient", return an empty claims array and explain the missing evidence in answer and limitations.
 
 Question:
 ${question}

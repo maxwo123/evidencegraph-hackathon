@@ -33,6 +33,11 @@ export function AnswerCard({ answer, onOpenSource }: AnswerCardProps) {
             </div>
             <div>
               <h2>Claim {claimIndex + 1}</h2>
+              <p className={`claim-kind kind-${claim.kind}`}>
+                {claim.kind === "direct_evidence"
+                  ? "Direct evidence"
+                  : "Interpretation"}
+              </p>
               <p>{claim.text}</p>
               <div
                 className="source-links"

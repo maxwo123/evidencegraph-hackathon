@@ -9,6 +9,7 @@ const validModelAnswer = {
   claims: [
     {
       text: "The FDA comparison was molecular-weight restricted.",
+      kind: "direct_evidence",
       passageIds: ["morgan-2017-rbind-fda-01"],
     },
   ],
@@ -43,7 +44,13 @@ describe("parseGroundedModelAnswer", () => {
   it("rejects a citation that is not in the approved fixture", () => {
     const answer = {
       ...validModelAnswer,
-      claims: [{ text: "Unsupported", passageIds: ["made-up-2026-01"] }],
+      claims: [
+        {
+          text: "Unsupported",
+          kind: "direct_evidence",
+          passageIds: ["made-up-2026-01"],
+        },
+      ],
     };
 
     expect(() =>
@@ -61,5 +68,20 @@ describe("parseGroundedModelAnswer", () => {
     expect(() =>
       parseGroundedModelAnswer(JSON.stringify(answer), "muse-spark-1.3"),
     ).toThrow();
+  });
+
+  it("accepts an insufficient answer without invented claims", () => {
+    const result = parseGroundedModelAnswer(
+      JSON.stringify({
+        answer: "The supplied passages do not address this question.",
+        status: "insufficient",
+        claims: [],
+        limitations: ["No relevant evidence is present in the reviewed corpus."],
+      }),
+      "muse-spark-1.3",
+    );
+
+    expect(result.status).toBe("insufficient");
+    expect(result.claims).toEqual([]);
   });
 });
