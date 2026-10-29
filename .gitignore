@@ -9,3 +9,5 @@ __pycache__/
 /Prep/
 /lab manuals/
 /local-papers/
+.vercel
+.env*
