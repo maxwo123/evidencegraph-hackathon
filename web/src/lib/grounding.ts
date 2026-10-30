@@ -1,4 +1,4 @@
-import { getAllowedPassageIds } from "@/lib/evidence";
+import { verifyCitationProvenance } from "@/lib/provenance";
 import { modelAnswerSchema, type GroundedAnswer } from "@/lib/schemas";
 
 function extractJson(text: string): unknown {
@@ -15,13 +15,10 @@ export function parseGroundedModelAnswer(
   model: string,
 ): GroundedAnswer {
   const parsed = modelAnswerSchema.parse(extractJson(text));
-  const allowedIds = getAllowedPassageIds();
 
   for (const claim of parsed.claims) {
-    for (const passageId of claim.passageIds) {
-      if (!allowedIds.has(passageId)) {
-        throw new Error(`Model returned an unknown passage ID: ${passageId}`);
-      }
+    for (const citation of claim.citations) {
+      verifyCitationProvenance(citation);
     }
   }
 

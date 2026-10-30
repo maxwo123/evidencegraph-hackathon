@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, useRef, useState } from "react";
 
 import { AnswerCard } from "@/components/answer-card";
 import { SourceDrawer } from "@/components/source-drawer";
@@ -21,6 +21,7 @@ export function EvidenceWorkbench({ initialAnswer }: EvidenceWorkbenchProps) {
   const [activePassageId, setActivePassageId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const requestInFlight = useRef(false);
 
   const activePassage = activePassageId
     ? getPassageById(activePassageId)
@@ -28,6 +29,9 @@ export function EvidenceWorkbench({ initialAnswer }: EvidenceWorkbenchProps) {
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (requestInFlight.current) return;
+
+    requestInFlight.current = true;
     setIsLoading(true);
     setError(null);
 
@@ -55,6 +59,7 @@ export function EvidenceWorkbench({ initialAnswer }: EvidenceWorkbenchProps) {
           : "The request failed.",
       );
     } finally {
+      requestInFlight.current = false;
       setIsLoading(false);
     }
   }

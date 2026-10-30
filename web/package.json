@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "test": "vitest run",
+    "test:trust": "vitest run src/lib/grounding.test.ts src/app/api/answer/route.test.ts src/components/evidence-workbench.test.tsx",
     "evaluate:two-paper": "node scripts/run-two-paper-comparison.mjs",
     "ingest-paper": "node scripts/ingest-paper.mjs"
   },

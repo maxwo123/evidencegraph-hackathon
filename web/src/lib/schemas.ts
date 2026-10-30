@@ -7,10 +7,15 @@ export const evidenceStatusSchema = z.enum([
   "insufficient",
 ]);
 
+export const citationSchema = z.object({
+  passageId: z.string().min(1),
+  quote: z.string().trim().min(12),
+});
+
 export const claimSchema = z.object({
   text: z.string().min(1),
   kind: z.enum(["direct_evidence", "interpretation"]),
-  passageIds: z.array(z.string().min(1)).min(1),
+  citations: z.array(citationSchema).min(1),
 });
 
 const answerFields = {

@@ -43,15 +43,15 @@ export function AnswerCard({ answer, onOpenSource }: AnswerCardProps) {
                 className="source-links"
                 aria-label={`Sources for claim ${claimIndex + 1}`}
               >
-                {claim.passageIds.map((passageId) => {
-                  const passage = getPassageById(passageId);
+                {claim.citations.map((citation, citationIndex) => {
+                  const passage = getPassageById(citation.passageId);
                   if (!passage) return null;
 
                   return (
                     <button
                       type="button"
-                      key={passageId}
-                      onClick={() => onOpenSource(passageId)}
+                      key={`${citation.passageId}-${citationIndex}`}
+                      onClick={() => onOpenSource(citation.passageId)}
                     >
                       <span aria-hidden="true">↳</span>
                       {passage.authors.split(",")[0]} {passage.year} · {passage.location}

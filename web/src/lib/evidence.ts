@@ -154,27 +154,57 @@ export const reviewedAnswer: GroundedAnswer = {
     {
       text: "The comparison reports significant molecular-property differences after restricting the FDA reference set to the R-BIND molecular-weight range.",
       kind: "direct_evidence",
-      passageIds: ["morgan-2017-rbind-fda-01"],
+      citations: [
+        {
+          passageId: "morgan-2017-rbind-fda-01",
+          quote:
+            "R-BIND (SM) contained fewer sp3-hybridized carbons (Fsp3) and stereocenters (nStereo) compared to the FDA library.",
+        },
+      ],
     },
     {
       text: "The authors frame these patterns as guiding principles that still require explicit testing across RNA targets.",
       kind: "interpretation",
-      passageIds: ["morgan-2017-future-testing-01"],
+      citations: [
+        {
+          passageId: "morgan-2017-future-testing-01",
+          quote:
+            "suggest several important future directions, including the explicit testing of these guiding principles against several RNA targets",
+        },
+      ],
     },
     {
       text: "Donlic 2022 reports that the small-molecule corpus grew from 97 to 153 while its distinguishing cheminformatic and shape trends remained.",
       kind: "direct_evidence",
-      passageIds: ["donlic-2022-dataset-update-01"],
+      citations: [
+        {
+          passageId: "donlic-2022-dataset-update-01",
+          quote:
+            "despite the small molecule database ligand number increasing by 50% (n = 97 to n = 153), distinguishing cheminformatics and shape-based trends remained the same",
+        },
+      ],
     },
     {
       text: "The updated molecular-weight-matched FDA comparison reports significant differences for 18 of 20 physicochemical parameters.",
       kind: "direct_evidence",
-      passageIds: ["donlic-2022-rbind-fda-01"],
+      citations: [
+        {
+          passageId: "donlic-2022-rbind-fda-01",
+          quote:
+            "18 out of 20 physicochemical parameters between the FDA and R-BIND 2.0 library had statistically significant differences.",
+        },
+      ],
     },
     {
       text: "Some apparent shifts between R-BIND 1.2 and 2.0 were attributed to reclassification rather than a changed chemical space.",
       kind: "interpretation",
-      passageIds: ["donlic-2022-reclassification-01"],
+      citations: [
+        {
+          passageId: "donlic-2022-reclassification-01",
+          quote:
+            "these differences were due to reclassification and not a change in the chemical space itself.",
+        },
+      ],
     },
   ],
   limitations: [

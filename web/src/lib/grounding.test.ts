@@ -2,6 +2,13 @@ import { describe, expect, it } from "vitest";
 
 import { getPassageById } from "@/lib/evidence";
 import { parseGroundedModelAnswer } from "@/lib/grounding";
+import { verifyCitationProvenance } from "@/lib/provenance";
+
+const validCitation = {
+  passageId: "morgan-2017-rbind-fda-01",
+  quote:
+    "R-BIND (SM) contained fewer sp3-hybridized carbons (Fsp3) and stereocenters (nStereo) compared to the FDA library.",
+};
 
 const validModelAnswer = {
   answer: "The paper reports a descriptive comparison with limitations.",
@@ -10,7 +17,7 @@ const validModelAnswer = {
     {
       text: "The FDA comparison was molecular-weight restricted.",
       kind: "direct_evidence",
-      passageIds: ["morgan-2017-rbind-fda-01"],
+      citations: [validCitation],
     },
   ],
   limitations: ["This does not establish prospective prediction."],
@@ -27,6 +34,38 @@ describe("evidence fixture", () => {
     expect(getPassageById("donlic-2022-rbind-fda-01")?.location).toBe(
       "R-BIND (SM) 2.0 vs FDA",
     );
+  });
+});
+
+describe("citation provenance", () => {
+  it("accepts an exact quote from an approved passage", () => {
+    const result = verifyCitationProvenance(validCitation);
+
+    expect(result.provenance).toBe("valid");
+    expect(result.semanticSupport).toBe("not_assessed");
+  });
+
+  it("rejects an altered scientific phrase", () => {
+    expect(() =>
+      verifyCitationProvenance({
+        ...validCitation,
+        quote:
+          "R-BIND (SM) contained more sp3-hybridized carbons (Fsp3) and stereocenters (nStereo) compared to the FDA library.",
+      }),
+    ).toThrow("quote does not match passage");
+  });
+
+  it("does not mistake valid provenance for semantic support", () => {
+    const unsupportedClaim = {
+      text: "The cited molecules cure viral infections.",
+      kind: "direct_evidence",
+      citations: [validCitation],
+    };
+
+    const result = verifyCitationProvenance(unsupportedClaim.citations[0]);
+
+    expect(result.provenance).toBe("valid");
+    expect(result.semanticSupport).toBe("not_assessed");
   });
 });
 
@@ -48,7 +87,12 @@ describe("parseGroundedModelAnswer", () => {
         {
           text: "Unsupported",
           kind: "direct_evidence",
-          passageIds: ["made-up-2026-01"],
+          citations: [
+            {
+              passageId: "made-up-2026-01",
+              quote: "This invented quote is long enough for the schema.",
+            },
+          ],
         },
       ],
     };

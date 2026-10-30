@@ -28,12 +28,20 @@ Return JSON only, with exactly this shape:
   "answer": "concise synthesis",
   "status": "supported | supported_with_limitations | mixed | insufficient",
   "claims": [
-    {"text": "one atomic claim", "kind": "direct_evidence | interpretation", "passageIds": ["exact-passage-id"]}
+    {
+      "text": "one atomic claim",
+      "kind": "direct_evidence | interpretation",
+      "citations": [
+        {"passageId": "exact-passage-id", "quote": "a contiguous exact quote copied from that passage"}
+      ]
+    }
   ],
   "limitations": ["one specific limitation"]
 }
 
 Use "direct_evidence" for a reported method, measurement, comparison, or result. Use "interpretation" for an author conclusion, proposed implication, or synthesis. If status is "insufficient", return an empty claims array and explain the missing evidence in answer and limitations.
+
+Every citation quote must be a contiguous, verbatim substring of its cited passage. Do not paraphrase inside quote. A valid source ID and exact quote establish provenance, not semantic entailment, so attach only quotes that actually support the claim.
 
 Question:
 ${question}
