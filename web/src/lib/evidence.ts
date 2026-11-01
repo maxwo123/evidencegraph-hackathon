@@ -209,7 +209,7 @@ export const reviewedAnswer: GroundedAnswer = {
   ],
   limitations: [
     "The FDA collection is a reference library, not a same-assay non-binder control.",
-    "Donlic 2022 extends a related R-BIND corpus and is not an independent replication dataset.",
+    "Donlic 2022 adds molecules to an overlapping, related R-BIND corpus, providing partial but non-independent replication rather than an independent validation dataset.",
     "The analysis is retrospective and does not establish prospective prediction of RNA binding.",
   ],
   model: "Human-reviewed fixture",

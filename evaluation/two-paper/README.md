@@ -23,4 +23,4 @@ The four human-authored reference records are in `reference-answers.json`. They 
 
 ## Interpretation boundary
 
-Morgan 2017 and Donlic 2022 are related R-BIND analyses. Donlic is an update and expansion, not an independent replication. Neither paper validates prospective RNA-binding prediction for unseen compounds.
+Morgan 2017 and Donlic 2022 are related R-BIND analyses. Donlic adds new molecules while updating and reclassifying an overlapping corpus, so it provides partial but non-independent replication rather than independent validation. Neither paper validates prospective RNA-binding prediction for unseen compounds.

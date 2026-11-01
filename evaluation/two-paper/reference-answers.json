@@ -6,7 +6,7 @@
       "question": "What molecular-property differences does each paper report?",
       "referenceAnswer": "Morgan 2017 reports distribution differences between curated bioactive RNA-targeted small molecules and a molecular-weight-restricted FDA-drug reference set, including lower molecular complexity in R-BIND and differences in recognition-related properties. Donlic 2022 reports that the broad distinguishing trends persist in R-BIND 2.0; 18 of 20 physicochemical parameters differ in its updated molecular-weight-matched FDA comparison. Donlic also warns that some shifts between R-BIND 1.2 and 2.0, including molecular weight and accessible surface area, arise from reclassification rather than a changed chemical space.",
       "requiredPassageIds": ["morgan-2017-rbind-fda-01", "donlic-2022-reclassification-01", "donlic-2022-rbind-fda-01"],
-      "requiredQualifications": ["The FDA library is a reference/proxy, not a same-assay non-binder control.", "The Donlic corpus update is related to the earlier R-BIND dataset, not an independent replication."],
+      "requiredQualifications": ["The FDA library is a reference/proxy, not a same-assay non-binder control.", "The Donlic update adds molecules to an overlapping, related R-BIND corpus, so it is partial but non-independent replication rather than independent validation."],
       "prohibitedOverstatements": ["The properties prospectively predict RNA binding.", "Donlic independently replicated Morgan on an unrelated dataset."]
     },
     {
@@ -22,7 +22,7 @@
       "question": "How are the datasets related, and what new evidence does the update add?",
       "referenceAnswer": "Donlic 2022 expands and reclassifies the R-BIND resource that developed from the earlier corpus rather than providing an independent dataset. It grows the small-molecule set from 97 to 153, reports persistence of broad property and rod-like shape trends, updates the FDA comparison, adds RNA structural-motif analyses and an RNA Structure Search tool, and reports structural-class classification performance among curated known ligands.",
       "requiredPassageIds": ["donlic-2022-dataset-update-01", "donlic-2022-structure-classes-01"],
-      "requiredQualifications": ["Continuity strengthens robustness to a database update but is weaker than independent replication."],
+      "requiredQualifications": ["Continuity and added molecules provide partial but non-independent replication; this is weaker than independent validation."],
       "prohibitedOverstatements": ["The update is an independent prospective validation study."]
     },
     {
