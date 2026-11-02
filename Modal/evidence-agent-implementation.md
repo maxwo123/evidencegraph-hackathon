@@ -49,10 +49,11 @@ Unsupported question:
 - Result: `insufficient`
 - Claims: 0
 
-The two end-to-end workflow checks added $0.02 according to Modal's billing
-summary. At the time of this run Modal labeled that amount **Billed Cost**, not
-credit-offset usage; shared-endpoint billing should be monitored separately
-from the hackathon credit balance.
+The first two end-to-end workflow checks added $0.02 according to Modal's
+billing summary. That early summary temporarily labeled the amount as billed.
+After the final release checks, Modal reported $0.08 metered usage deducted from
+credits and $0.00 billed cost. Shared-endpoint billing should still be monitored
+through judging.
 
 ## Safety boundaries
 
