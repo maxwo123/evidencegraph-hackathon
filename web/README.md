@@ -1,27 +1,28 @@
-# EvidenceGraph web app
+# EvidenceGraph web application
 
-This directory contains the minimal EvidenceGraph vertical slice: one reviewed
-Morgan 2017 evidence fixture, a server-side Meta Model API request, a grounded
-answer card, and exact source-passage reveal.
+This Next.js application provides two server-side research paths over a
+two-paper, six-passage reviewed corpus:
 
-## Run locally
+- **Direct answer** uses Meta Model API with `muse-spark-1.3`.
+- **Verified agent · Modal** uses Muse Spark Open to plan evidence, retrieve
+  reviewed passages, draft cited claims, validate provenance, repair once, and
+  answer or abstain.
+
+## Local setup
 
 ```bash
 npm install
 cp .env.example .env.local
-# Add your MODEL_API_KEY to .env.local
 npm run dev
 ```
 
-Open <http://localhost:3000>. The reviewed baseline and source reveal work
-without an API key. The **Analyze evidence** action requires the key.
+Open <http://localhost:3000>.
 
-`MODEL_API_KEY` is server-only: it is read only inside the answer route and is
-never exposed through a `NEXT_PUBLIC_` variable. The integration uses the
-official Meta Model API base URL, `https://api.meta.ai/v1`, and defaults to
-`muse-spark-1.3`.
+The initial human-reviewed answer and source reveal work without credentials.
+The direct and agent actions require their corresponding server-only variables
+from `.env.example`. No credential may use a `NEXT_PUBLIC_` prefix.
 
-## Checks
+## Quality checks
 
 ```bash
 npm test
@@ -29,18 +30,27 @@ npm run lint
 npm run build
 ```
 
-## Ingest a PMC paper for review
+## Modal open-weight evaluation
 
-Use a PubMed Central ID to acquire the official metadata, structured XML, full
-text, checksums, and stable paragraph records:
+```bash
+npm run evaluate:modal-open-weight
+```
+
+This command sends one supported and one unsupported question to the configured
+Modal endpoint and may incur usage charges.
+
+## Review-gated PMC ingestion
 
 ```bash
 npm run ingest-paper -- --pmcid PMC9343015
 ```
 
-Generated files are saved under `local-papers/ingestion/`, which is outside
-Git. Ingestion stops at `needs_review`; it does not silently add a paper to the
-live corpus. Candidate scientific passages still require selection and review.
+Generated source artifacts are saved under ignored `local-papers/ingestion/`.
+Ingestion ends at `needs_review`; it never silently changes the live corpus.
 
-The response validator rejects malformed model output and any source ID that
-does not exist in the checked evidence fixture.
+## Trust boundary
+
+The response validator rejects malformed output, unknown passage IDs, altered
+quotations, and—on the agent path—citations to passages the planner did not
+select. Exact quotation matching establishes provenance only. It does not
+establish semantic support or scientific truth.

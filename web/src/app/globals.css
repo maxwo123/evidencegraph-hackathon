@@ -38,6 +38,7 @@ textarea {
 button,
 a {
   -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 
 button:focus-visible,
@@ -51,6 +52,25 @@ textarea:focus-visible {
   width: min(100% - 40px, 1440px);
   min-height: 100vh;
   margin: 0 auto;
+}
+
+.skip-link {
+  position: fixed;
+  z-index: 50;
+  top: 12px;
+  left: 12px;
+  padding: 10px 14px;
+  border: 1px solid var(--ink);
+  color: var(--white);
+  background: var(--cobalt);
+  font-family: var(--font-plex-mono), monospace;
+  font-size: 11px;
+  text-decoration: none;
+  transform: translateY(-160%);
+}
+
+.skip-link:focus-visible {
+  transform: translateY(0);
 }
 
 .masthead {
@@ -141,6 +161,7 @@ textarea:focus-visible {
   font-weight: 500;
   line-height: 0.88;
   letter-spacing: -0.06em;
+  text-wrap: balance;
 }
 
 .hero-copy {
@@ -506,6 +527,15 @@ textarea:focus-visible {
   border-top: 1px solid var(--ink);
 }
 
+.evidence-empty {
+  margin: 0;
+  padding: 26px;
+  color: var(--ink-muted);
+  font-family: var(--font-plex-mono), monospace;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
 .evidence-rail::before {
   content: "";
   position: absolute;
@@ -642,6 +672,7 @@ textarea:focus-visible {
   width: min(600px, 94vw);
   height: 100%;
   overflow-y: auto;
+  overscroll-behavior: contain;
   color: var(--ink);
   background: var(--paper);
   border-left: 1px solid var(--ink);

@@ -26,6 +26,11 @@ export function AnswerCard({ answer, onOpenSource }: AnswerCardProps) {
       <p className="answer-summary">{answer.answer}</p>
 
       <div className="evidence-rail">
+        {answer.claims.length === 0 ? (
+          <p className="evidence-empty">
+            No supported claims were produced from the reviewed corpus.
+          </p>
+        ) : null}
         {answer.claims.map((claim, claimIndex) => (
           <section className="claim-row" key={`${claim.text}-${claimIndex}`}>
             <div className="claim-index" aria-hidden="true">

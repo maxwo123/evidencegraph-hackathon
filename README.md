@@ -1,63 +1,165 @@
-# Life sciences + ML discovery and EvidenceGraph
+# EvidenceGraph
 
-This repository is a working place to learn how life sciences research happens, identify useful applications of ML, and prepare EvidenceGraph for the Meta Global AI Developer Hackathon.
+EvidenceGraph is a verified scientific-literature agent that connects each
+generated claim to an exact, human-reviewed source passage—and abstains when
+the reviewed corpus cannot support an answer.
 
-## Current hackathon project — October 23, 2026
+**Live application:** <https://evidencegraph-hackathon.vercel.app>
 
-EvidenceGraph is a chatbot-style scientific research assistant. Its hackathon demonstration uses six papers from the RNA Rule of Five literature. A small knowledge graph connects generated answers to claims, datasets, comparison groups, methods, and exact source passages. Meta Model API performs structured extraction and evidence-constrained answer generation.
+## Why it exists
 
-The public implementation, permitted demonstration data, evaluation artifacts, and
-submission documentation will be added to this repository during the hackathon.
-Private planning notes and lab manuals are intentionally maintained outside the
-public Git history.
+Ordinary research chat can produce a plausible synthesis while hiding whether
+its sources are comparable, whether a quotation actually exists, or whether
+the available papers address the question at all. EvidenceGraph separates the
+model's proposal from the application's decision to trust it.
 
-The separate [life sciences research notebook](life-sciences-research-notebook.md) records the broader research and customer-discovery work that preceded the hackathon direction.
+The hackathon investigation asks what molecular-property differences Morgan
+2017 and Donlic 2022 report for RNA-targeting small molecules. The demonstration
+corpus is deliberately narrow: **two papers and six manually reviewed
+passages**. This is a verifiable prototype, not a general scientific database
+or molecule-binding predictor.
 
-## Run the EvidenceGraph prototype
+## What works
 
-The [Next.js application](web/README.md) implements the first end-to-end slice:
-a reviewed Morgan 2017 passage fixture, server-side Meta Model API request,
-grounded answer card, claim-to-passage links, and source reveal.
+- A direct evidence-constrained answer path using Meta Model API and
+  `muse-spark-1.3`.
+- A bounded agent path using Meta's open-weight Muse Spark Open model through a
+  Modal Shared Endpoint.
+- Model-directed evidence planning and reviewed-passage selection.
+- Deterministic rejection of unknown passage IDs, altered quotations, and
+  citations outside the agent's selected evidence.
+- One bounded repair attempt, followed by a verified answer or abstention.
+- Claim-level source buttons that reveal the exact passage, metadata, and
+  official source URL.
+- Review-gated PubMed Central ingestion that stops before adding unreviewed text
+  to the live corpus.
+
+## Verified agent flow
+
+```text
+Research question
+      ↓
+Muse Spark Open plans evidence needs and selects reviewed passage IDs
+      ↓
+Application code retrieves only approved passages
+      ↓
+Muse Spark Open drafts atomic claims and exact quotations
+      ↓
+Zod validates structure; deterministic code validates provenance
+      ↓
+valid answer ── or ── one repair ── or ── abstention
+```
+
+The model cannot approve its own citations. Exact quotation matching proves
+provenance, not scientific truth or semantic entailment; important scientific
+claims still require human review.
+
+## Models and infrastructure
+
+| Role | System |
+| --- | --- |
+| Direct answer and fallback | Meta Model API · `muse-spark-1.3` |
+| Agent planning and drafting | Meta Muse Spark Open · `meta-models/Muse-Spark-Open-816B-A42B` |
+| Open-weight hosting | Modal Shared Endpoint |
+| Application | Next.js 16, React 19, TypeScript, Zod |
+| Hosting | Vercel |
+
+The OpenAI JavaScript package is used only as an OpenAI-compatible protocol
+client for the Meta and Modal endpoints. No OpenAI-hosted model powers the
+application.
+
+## Evidence from the release candidate
+
+- 24 automated tests pass across provenance, route boundaries, agent repair,
+  abstention, and UI behavior.
+- The hosted supported-question agent run selected four reviewed passages and
+  returned nine claims with nine exact-quote citations; all passed the
+  deterministic validator without repair.
+- The hosted unsupported SARS-CoV-2 question selected zero passages, skipped
+  drafting, and returned `insufficient` with zero claims.
+- The direct Meta answer path remains available and passed its hosted check.
+
+These are bounded demonstration results, not evidence of accuracy across
+arbitrary papers or research domains.
+
+## Run locally
 
 ```bash
 cd web
 npm install
 cp .env.example .env.local
-# Add MODEL_API_KEY to .env.local, then:
+# Add the required server-only credentials to .env.local
 npm run dev
 ```
 
-The reviewed baseline remains inspectable without a key. Live generation uses
-the key only on the server; no API credential is included in browser code.
+Required for the direct path:
 
-## Research notebook status — October 19, 2026
+- `MODEL_API_KEY`
+- `META_API_BASE_URL`
+- `META_MODEL`
 
-- The notebook is a **first draft**. It maps the research process, common lab roles, data and ML workflows, and questions to ask researchers.
-- There are **no recorded researcher interviews yet**. The [conversation notes section](life-sciences-research-notebook.md#12-conversation-notes) contains a template ready to copy after each call.
-- The only idea in the parking lot is finding specialists for narrow scientific AI tasks. It came from earlier market analysis and is **unvalidated**. Do not treat it as the chosen business.
-- The notebook distinguishes four possible layers: annotation work, expert recruitment, workflow tools, and prediction models. Interviews should show which problem, if any, is costly and repeated.
+Required for the verified agent:
 
-## Resume from here
+- `MODAL_PROXY_TOKEN`
+- `MODAL_API_BASE_URL`
+- `MODAL_MODEL`
 
-1. **Talk to people doing the work.** Start with individual conversations with technicians, graduate students, postdocs, and other lab researchers. The notebook suggests an initial round of 4–6 researchers across a few settings, plus 2–3 life sciences ML/data practitioners and 1–2 provider or buyer conversations.
-2. **Ask about a recent project.** Use the [interview guides](life-sciences-research-notebook.md#15-interview-guides). Get the actual workflow, the last concrete problem, the current workaround, its frequency and consequence, and who could approve a change.
-3. **Write up each call.** Copy the [conversation note template](life-sciences-research-notebook.md#12-conversation-notes). Keep what the person said separate from your interpretation and any proposed solution. Do not put confidential lab data in this repository.
-4. **Look for a repeated problem before building.** Compare the stories using the [testable opportunities section](life-sciences-research-notebook.md#16-turn-interviews-into-testable-opportunities). Pick a small manual trial or prototype only after identifying a specific user, buyer, and measurable improvement.
+Never prefix these credentials with `NEXT_PUBLIC_`.
 
-For background before a call, read the notebook's [research overview](life-sciences-research-notebook.md#1-what-is-life-sciences-research), [ML workflow map](life-sciences-research-notebook.md#13-how-ml-reaches-a-life-sciences-workflow), and [open questions](life-sciences-research-notebook.md#10-questions-to-investigate-next).
+## Checks and evaluation
+
+```bash
+cd web
+npm test
+npm run lint
+npm run build
+npm run evaluate:modal-open-weight
+```
+
+The Modal evaluation command makes billable endpoint requests. The two-paper
+comparison materials are in [`evaluation/two-paper`](evaluation/two-paper), and
+the agent implementation record is in
+[`Modal/evidence-agent-implementation.md`](Modal/evidence-agent-implementation.md).
+
+## Ingest a PubMed Central paper for review
+
+```bash
+cd web
+npm run ingest-paper -- --pmcid PMC9343015
+```
+
+The command saves metadata, source XML, checksums, and stable paragraph records
+under the ignored `local-papers/ingestion/` directory. It finishes with
+`needs_review`; a paper is never added to the live corpus automatically.
+
+## Known limitations
+
+- The live corpus contains only two related R-BIND papers and six excerpts.
+- Donlic 2022 adds data to an overlapping corpus; it is partial,
+  non-independent replication rather than independent validation.
+- Exact-quote validation does not prove that a claim is scientifically correct.
+- Passage selection and interpretation can still be wrong and require review.
+- There is no arbitrary upload interface, vector database, user account system,
+  fine-tuning, or prospective prediction of RNA binding.
+- Modal Shared Endpoint usage may be billed separately from promotional
+  credits.
+
+## Hackathon disclosure
+
+The public implementation, reviewed demonstration corpus, evaluation harness,
+trust checks, Modal integration, verified agent, and deployment were built
+during the Meta Global AI Developer Hackathon. Earlier research and planning
+are identified separately. See
+[`submission/work-history-and-disclosures.md`](submission/work-history-and-disclosures.md).
 
 ## License
 
 Copyright © 2026 Max Wo.
 
-Except where otherwise noted, the original source code and original
-documentation in this repository are licensed under the
-[GNU Affero General Public License version 3](LICENSE), identified by the SPDX
-expression `AGPL-3.0-only`.
+Except where otherwise noted, original source code and original documentation
+are licensed under the [GNU Affero General Public License version 3](LICENSE),
+SPDX expression `AGPL-3.0-only`.
 
 This license does not relicense third-party materials. Research papers,
-datasets, quoted or extracted source passages, event rules and waiver text,
-trademarks, dependencies, and other third-party materials remain subject to
-their respective owners' terms. Only third-party material that may lawfully be
-redistributed will be included in this repository, with its source and license
-identified where applicable.
+datasets, quoted passages, event materials, trademarks, dependencies, and other
+third-party materials remain subject to their respective owners' terms.

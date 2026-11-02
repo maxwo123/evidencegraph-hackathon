@@ -48,9 +48,9 @@ export function EvidenceWorkbench({ initialAnswer }: EvidenceWorkbenchProps) {
       const response = await fetch(
         mode === "agent" ? "/api/agent-answer" : "/api/answer",
         {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ question }),
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ question }),
         },
       );
       const body: unknown = await response.json();
@@ -83,7 +83,10 @@ export function EvidenceWorkbench({ initialAnswer }: EvidenceWorkbenchProps) {
   }
 
   return (
-    <main className="app-shell">
+    <main className="app-shell" id="main-content" tabIndex={-1}>
+      <a className="skip-link" href="#question">
+        Skip to research question
+      </a>
       <header className="masthead">
         <a className="wordmark" href="#top" aria-label="EvidenceGraph home">
           Evidence<span>Graph</span>
@@ -130,6 +133,8 @@ export function EvidenceWorkbench({ initialAnswer }: EvidenceWorkbenchProps) {
             <label htmlFor="question">Ask the reviewed corpus</label>
             <textarea
               id="question"
+              name="question"
+              autoComplete="off"
               value={question}
               onChange={(event) => setQuestion(event.target.value)}
               rows={7}

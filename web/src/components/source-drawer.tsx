@@ -9,16 +9,38 @@ type SourceDrawerProps = {
 
 export function SourceDrawer({ passage, onClose }: SourceDrawerProps) {
   const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const drawerRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     if (!passage) return;
 
+    const previouslyFocused = document.activeElement as HTMLElement | null;
     closeButtonRef.current?.focus();
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") onClose();
+      if (event.key !== "Tab" || !drawerRef.current) return;
+
+      const focusable = Array.from(
+        drawerRef.current.querySelectorAll<HTMLElement>(
+          'button:not([disabled]), a[href], [tabindex]:not([tabindex="-1"])',
+        ),
+      );
+      const first = focusable[0];
+      const last = focusable.at(-1);
+
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last?.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first?.focus();
+      }
     };
     window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      previouslyFocused?.focus();
+    };
   }, [passage, onClose]);
 
   if (!passage) return null;
@@ -32,6 +54,7 @@ export function SourceDrawer({ passage, onClose }: SourceDrawerProps) {
         onClick={onClose}
       />
       <aside
+        ref={drawerRef}
         className="source-drawer"
         role="dialog"
         aria-modal="true"

@@ -199,11 +199,13 @@ and deployment move to the post-hackathon roadmap.
 
 ### Phase 4 — Demo and evaluation
 
-- Show workflow stages without exposing private reasoning traces.
-- Demonstrate one successful answer, one rejected citation, and one abstention.
-- Measure citation validity, schema success, abstention behavior, latency, and
+- [x] Show workflow stages without exposing private reasoning traces.
+- [ ] Demonstrate one successful answer, one rejected citation, and one abstention.
+  Success and abstention are live; rejected-citation repair is covered by the
+  automated harness rather than forced in the production demo.
+- [x] Measure citation validity, schema success, abstention behavior, latency, and
   recovery from provider failure.
-- Retain a deterministic reviewed fallback for the three-minute demo.
+- [x] Retain a deterministic reviewed fallback for the three-minute demo.
 
 ## X and community strategy
 
