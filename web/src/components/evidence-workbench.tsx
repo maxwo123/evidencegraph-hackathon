@@ -4,12 +4,18 @@ import { FormEvent, useRef, useState } from "react";
 
 import { AnswerCard } from "@/components/answer-card";
 import { SourceDrawer } from "@/components/source-drawer";
+import { WorkflowTrace } from "@/components/workflow-trace";
 import {
   defaultQuestion,
   exampleQuestions,
   getPassageById,
 } from "@/lib/evidence";
-import { groundedAnswerSchema, type GroundedAnswer } from "@/lib/schemas";
+import {
+  evidenceAgentRunSchema,
+  groundedAnswerSchema,
+  type EvidenceAgentRun,
+  type GroundedAnswer,
+} from "@/lib/schemas";
 
 type EvidenceWorkbenchProps = {
   initialAnswer: GroundedAnswer;
@@ -18,6 +24,8 @@ type EvidenceWorkbenchProps = {
 export function EvidenceWorkbench({ initialAnswer }: EvidenceWorkbenchProps) {
   const [question, setQuestion] = useState(defaultQuestion);
   const [answer, setAnswer] = useState(initialAnswer);
+  const [mode, setMode] = useState<"direct" | "agent">("direct");
+  const [agentRun, setAgentRun] = useState<EvidenceAgentRun | null>(null);
   const [activePassageId, setActivePassageId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -34,13 +42,17 @@ export function EvidenceWorkbench({ initialAnswer }: EvidenceWorkbenchProps) {
     requestInFlight.current = true;
     setIsLoading(true);
     setError(null);
+    setAgentRun(null);
 
     try {
-      const response = await fetch("/api/answer", {
+      const response = await fetch(
+        mode === "agent" ? "/api/agent-answer" : "/api/answer",
+        {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ question }),
-      });
+        },
+      );
       const body: unknown = await response.json();
 
       if (!response.ok) {
@@ -51,7 +63,13 @@ export function EvidenceWorkbench({ initialAnswer }: EvidenceWorkbenchProps) {
         throw new Error(message);
       }
 
-      setAnswer(groundedAnswerSchema.parse(body));
+      if (mode === "agent") {
+        const run = evidenceAgentRunSchema.parse(body);
+        setAgentRun(run);
+        setAnswer(run.answer);
+      } else {
+        setAnswer(groundedAnswerSchema.parse(body));
+      }
     } catch (requestError) {
       setError(
         requestError instanceof Error
@@ -92,6 +110,23 @@ export function EvidenceWorkbench({ initialAnswer }: EvidenceWorkbenchProps) {
             <p>Research question</p>
           </div>
           <form onSubmit={handleSubmit}>
+            <fieldset className="analysis-mode">
+              <legend>Analysis mode</legend>
+              <button
+                type="button"
+                aria-pressed={mode === "direct"}
+                onClick={() => setMode("direct")}
+              >
+                Direct answer
+              </button>
+              <button
+                type="button"
+                aria-pressed={mode === "agent"}
+                onClick={() => setMode("agent")}
+              >
+                Verified agent · Modal
+              </button>
+            </fieldset>
             <label htmlFor="question">Ask the reviewed corpus</label>
             <textarea
               id="question"
@@ -120,7 +155,11 @@ export function EvidenceWorkbench({ initialAnswer }: EvidenceWorkbenchProps) {
             <div className="question-footer">
               <p>Answers are constrained to the passages in this corpus.</p>
               <button type="submit" disabled={isLoading}>
-                {isLoading ? "Tracing evidence…" : "Analyze evidence"}
+                {isLoading
+                  ? mode === "agent"
+                    ? "Running workflow…"
+                    : "Tracing evidence…"
+                  : "Analyze evidence"}
                 <span aria-hidden="true">→</span>
               </button>
             </div>
@@ -137,6 +176,7 @@ export function EvidenceWorkbench({ initialAnswer }: EvidenceWorkbenchProps) {
             <span>02</span>
             <p>Grounded answer</p>
           </div>
+          {agentRun ? <WorkflowTrace run={agentRun} /> : null}
           <AnswerCard answer={answer} onOpenSource={setActivePassageId} />
         </div>
       </section>

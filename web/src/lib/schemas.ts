@@ -52,4 +52,26 @@ export const answerRequestSchema = z.object({
   question: z.string().trim().min(12).max(600),
 });
 
+export const agentStageSchema = z.object({
+  name: z.enum([
+    "planning",
+    "retrieval",
+    "comparison",
+    "drafting",
+    "validation",
+    "repair",
+    "completed",
+  ]),
+  status: z.enum(["completed", "skipped", "failed"]),
+  detail: z.string().min(1),
+});
+
+export const evidenceAgentRunSchema = z.object({
+  answer: groundedAnswerSchema,
+  stages: z.array(agentStageSchema).min(1),
+  selectedPassageIds: z.array(z.string().min(1)),
+  repaired: z.boolean(),
+});
+
 export type GroundedAnswer = z.infer<typeof groundedAnswerSchema>;
+export type EvidenceAgentRun = z.infer<typeof evidenceAgentRunSchema>;

@@ -88,4 +88,49 @@ describe("EvidenceWorkbench reliability", () => {
     );
     expect(submitButton).toBeEnabled();
   });
+
+  it("runs the Modal agent route and reveals its safe workflow stages", async () => {
+    const agentRun = {
+      answer: reviewedAnswer,
+      stages: [
+        {
+          name: "planning",
+          status: "completed",
+          detail: "Two evidence needs identified.",
+        },
+        {
+          name: "completed",
+          status: "completed",
+          detail: "Verified answer returned.",
+        },
+      ],
+      selectedPassageIds: ["morgan-2017-rbind-fda-01"],
+      repaired: false,
+    };
+    const fetchMock = vi.fn().mockResolvedValue(
+      new Response(JSON.stringify(agentRun), {
+        status: 200,
+        headers: { "Content-Type": "application/json" },
+      }),
+    );
+    vi.stubGlobal("fetch", fetchMock);
+
+    render(<EvidenceWorkbench initialAnswer={reviewedAnswer} />);
+    fireEvent.click(
+      screen.getByRole("button", { name: /verified agent · modal/i }),
+    );
+    fireEvent.click(
+      screen.getByRole("button", { name: /analyze evidence/i }),
+    );
+
+    await waitFor(() =>
+      expect(fetchMock).toHaveBeenCalledWith(
+        "/api/agent-answer",
+        expect.objectContaining({ method: "POST" }),
+      ),
+    );
+    expect(await screen.findByText("Verified workflow")).toBeInTheDocument();
+    expect(screen.getByText("Plan evidence")).toBeInTheDocument();
+    expect(screen.getByText("Verified answer returned.")).toBeInTheDocument();
+  });
 });

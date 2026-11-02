@@ -190,12 +190,12 @@ and deployment move to the post-hackathon roadmap.
 
 ### Phase 3 — Explicit agent workflow
 
-- Evidence-needs planning.
-- Reviewed retrieval.
-- Cross-paper comparison and dataset-lineage checks.
-- Claim drafting with exact quotations.
-- Deterministic citation validation.
-- One repair attempt, followed by answer or abstention.
+- [x] Evidence-needs planning.
+- [x] Reviewed retrieval.
+- [x] Cross-paper comparison and dataset-lineage checks.
+- [x] Claim drafting with exact quotations.
+- [x] Deterministic citation validation.
+- [x] One repair attempt, followed by answer or abstention.
 
 ### Phase 4 — Demo and evaluation
 
